@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>Guess! Where is the QR code piece?</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #74ebd5, #9face6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: #ffffffcc;
+      backdrop-filter: blur(10px);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+    }
+
+    h1 {
+      font-size: 2em;
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    p {
+      color: #555;
+      margin-bottom: 20px;
+    }
+
+    input[type="number"] {
+      padding: 10px;
+      width: 80%;
+      font-size: 1.1em;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      outline: none;
+      transition: 0.3s;
+    }
+
+    input[type="number"]:focus {
+      border-color: #5f88f0;
+    }
+
+    button {
+      background-color: #5f88f0;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 1em;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: #466ddf;
+    }
+
+    #message {
+      margin-top: 20px;
+      font-weight: bold;
+      font-size: 1.2em;
+      color: #444;
+    }
+
+    #history {
+      margin-top: 30px;
+      text-align: left;
+      font-size: 1em;
+      color: #333;
+    }
+
+    #history ul {
+      padding-left: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Guess! Where is the QR code piece?</h1>
+    <p>請猜一個 0 到 999 之間的整數：</p>
+    <input type="number" id="guessInput" min="0" max="999" />
+    <br>
+    <button onclick="checkGuess()">提交猜測</button>
+    <div id="message"></div>
+
+    <div id="history">
+      <h3>猜測紀錄：</h3>
+      <ul id="guessHistoryList"></ul>
+    </div>
+  </div>
+
+  <script>
+    const correctAnswer = 201;
+    const guessHistory = [];
+
+    function checkGuess() {
+      const inputElement = document.getElementById("guessInput");
+      const userGuess = parseInt(inputElement.value);
+      const messageDiv = document.getElementById("message");
+      const guessList = document.getElementById("guessHistoryList");
+
+      if (isNaN(userGuess)) {
+        messageDiv.textContent = "請輸入一個有效的數字！";
+        messageDiv.style.color = "#d9534f";
+        return;
+      }
+
+      guessHistory.push(userGuess);
+      updateHistory();
+
+      if (userGuess < correctAnswer) {
+        messageDiv.textContent = "太小了！再試一次。";
+        messageDiv.style.color = "#f0ad4e";
+      } else if (userGuess > correctAnswer) {
+        messageDiv.textContent = "太大了！再試一次。";
+        messageDiv.style.color = "#f0ad4e";
+      } else {
+        messageDiv.textContent = "🎉 恭喜你，猜對了！答案就是 201！";
+        messageDiv.style.color = "#5cb85c";
+      }
+
+      inputElement.value = "";
+    }
+
+    function updateHistory() {
+      const list = document.getElementById("guessHistoryList");
+      list.innerHTML = ""; // 清空原本的內容
+
+      guessHistory.forEach((guess, index) => {
+        const listItem = document.createElement("li");
+        listItem.textContent = `第 ${index + 1} 次：${guess}`;
+        list.appendChild(listItem);
+      });
+    }
+  </script>
+</body>
+</html>
